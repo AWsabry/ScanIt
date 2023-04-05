@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -102,6 +103,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+GRAPHENE = {
+    "SCHEMA": "Register_Login.schema.schema"
+}
+
+# GRAPHQL_AUTH = {
+#     'CUSTOM_ERROR_TYPE': 'accounts.custom_errors.CustomErrorType'
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

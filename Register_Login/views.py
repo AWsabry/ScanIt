@@ -15,11 +15,11 @@ from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import update_last_login
 
+from Register_Login.exception import APIException
+from .schema import get_all_users_schema,get_user_by_email_Schema
 
-# Rest Libraries
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
+# GraphQL Libraries
+from graphene_django.views import GraphQLView
 from django.http import JsonResponse
 
 # Importing the utilts file
@@ -239,3 +239,19 @@ def profile(request):
         return redirect("Register_Login:login")
     return render(request, "profile.html", context)
     
+
+
+
+
+def graphql(request):
+    return csrf_exempt(GraphQLView.as_view(schema=get_all_users_schema, graphiql=True))(request)
+
+
+def Usergraphql(request,email):
+    if request.method == 'GET':
+        getting_user = Profile.objects.get(email=email)
+        print(getting_user)
+    return csrf_exempt(GraphQLView.as_view(schema=get_user_by_email_Schema, graphiql=True))(request)
+
+
+
