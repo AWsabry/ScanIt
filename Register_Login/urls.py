@@ -1,6 +1,6 @@
 from django.urls import path,re_path
 from django.contrib.auth import views as auth_views
-from Register_Login.views import Register, activate_user, email_activated, logOut, profile, signIn,email_sent,password_reset_emailing, team,index,about_us,graphql,Usergraphql
+from Register_Login.views import Register, activate_user, email_activated, logOut, profile, signIn,email_sent,password_reset_emailing, team,index,about_us,graphql,Usergraphql,signUpGraph
 
 
 app_name = 'Register_Login'
@@ -17,9 +17,9 @@ urlpatterns = [
     path('about_us',view = about_us, name = "about_us"),
     path('profile',view = profile, name = "profile"),
 
-    path('graphql',view = graphql, name = "graphql"),
-
-    path('usergraph/<str:email>',view = Usergraphql, name = "Usergraphql"),
+    path('graphql/',view = graphql, name = "graphql"),
+    path('createuserg/',view=signUpGraph, name= "signUpGraph"),
+    path('usergraph/',view = Usergraphql, name = "Usergraphql"),
 
 
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),

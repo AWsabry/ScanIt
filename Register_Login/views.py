@@ -16,7 +16,7 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.models import update_last_login
 
 from Register_Login.exception import APIException
-from .schema import get_all_users_schema,get_user_by_email_Schema
+from .schema import get_all_users_schema,get_user_by_email_Schema,create_user_schema
 
 # GraphQL Libraries
 from graphene_django.views import GraphQLView
@@ -37,7 +37,7 @@ from Register_Login.models import AccessToken, Profile, Team_Member
 from Register_Login.forms import LoginForm, RegisterForm
 
 # Firebase Libraries
-
+from django.http import QueryDict
 
 # Email Confirm SignUp
 def send_tracking(user):
@@ -247,11 +247,11 @@ def graphql(request):
     return csrf_exempt(GraphQLView.as_view(schema=get_all_users_schema, graphiql=True))(request)
 
 
-def Usergraphql(request,email):
-    if request.method == 'GET':
-        getting_user = Profile.objects.get(email=email)
-        print(getting_user)
+def Usergraphql(request):
     return csrf_exempt(GraphQLView.as_view(schema=get_user_by_email_Schema, graphiql=True))(request)
+
+def signUpGraph(request):
+    return csrf_exempt(GraphQLView.as_view(schema=create_user_schema, graphiql=True))(request)
 
 
 
