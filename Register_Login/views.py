@@ -242,14 +242,14 @@ def profile(request):
 
 
 
-
+@csrf_exempt
 def graphql(request):
     return csrf_exempt(GraphQLView.as_view(schema=get_all_users_schema, graphiql=True))(request)
 
-
+@csrf_exempt
 def Usergraphql(request):
     return csrf_exempt(GraphQLView.as_view(schema=get_user_by_email_Schema, graphiql=True))(request)
-
+@csrf_exempt
 def signUpGraph(request):
     return csrf_exempt(GraphQLView.as_view(schema=create_user_schema, graphiql=True))(request)
 
