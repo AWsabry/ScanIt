@@ -13,6 +13,7 @@ class ProfileType(DjangoObjectType):
 
 class AllUsersQuery(graphene.ObjectType):
     all_users = graphene.List(ProfileType)
+
     def resolve_all_users(self, info):
         return Profile.objects.all()
     
@@ -25,7 +26,6 @@ class UserQuery(graphene.ObjectType):
     
 
 # Posting Data
-
 class CreateUserInput(InputObjectType):
         email = graphene.String(required=True)
         first_name = graphene.String(required=True)
@@ -36,8 +36,6 @@ class CreateUserInput(InputObjectType):
 class CreateUserMutation(graphene.Mutation):
     class Arguments:
         input = CreateUserInput(required=True)
-
-        
 
     user = graphene.Field(ProfileType)
 

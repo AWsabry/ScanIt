@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['http://127.0.0.1','127.0.0.1']
 
 INSTALLED_APPS = [
     'Register_Login',
+    'categories_and_products',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
