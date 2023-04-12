@@ -40,7 +40,7 @@ from django.http import JsonResponse
 # Creating Users
 @csrf_exempt 
 @api_view(['GET','POST'])
-def create_users_API(request):
+def signUp(request):
     if request.method == 'GET':
         all = Profile.objects.filter(is_active = True)
         serializer = UserSerializer(all,many = True)
@@ -68,7 +68,7 @@ def create_users_API(request):
 # Login Users
 @csrf_protect
 @api_view(['GET','POST','PUT'])
-def login_users_API(request):
+def login(request):
     if request.method == 'GET':
         all = Profile.objects.filter(is_active = True)
         serializer = LoginSerializer(all,many = True)
@@ -88,16 +88,16 @@ def login_users_API(request):
                         user_login(request, user)
                         print('active')
                         print(HttpResponse.status_code)
-                        return Response(status = status.HTTP_302_FOUND)
+                        return Response("User Logged In Successfully", status = status.HTTP_200_OK)
 
                 else:
                     print('Not Active')
-                    return Response.status_code
+                    return Response("User is Not Active", status = status.HTTP_400_BAD_REQUEST)
            
             else:
                 print('Invalid Credentials')
-                print(status.HTTP_404_NOT_FOUND)
-                return Response(status = status.HTTP_404_NOT_FOUND)
+                print(status.HTTP_400_BAD_REQUEST)
+                return Response("Invalid Credentials", status = status.HTTP_400_BAD_REQUEST)
                 
         else:
             print("Not Valid")
