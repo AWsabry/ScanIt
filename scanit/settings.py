@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "graphene_django",
-    "corsheaders"
+    "rest_framework",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -164,4 +165,8 @@ EMAIL_HOST_PASSWORD = 'h@l-[c]OFZyD'
 
 MAXIMUM_SIZE_ALLOWED_PHOTO = 1000 * 312 * 8
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 

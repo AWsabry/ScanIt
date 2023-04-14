@@ -1,6 +1,6 @@
-from django.urls import path,re_path
+from django.urls import path
 from django.contrib.auth import views as auth_views
-from Register_Login.views import graphql,Usergraphql,signUpGraph, signUp, login
+from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView
 
 
 app_name = 'Register_Login'
@@ -8,16 +8,29 @@ app_name = 'Register_Login'
 urlpatterns = [
 
 
-    path('signUp/', view= signUp, name='signUp'),
-    path('login/', view= login, name='login'),
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+    path('register/', view =RegisterAPIView.as_view(),),
+
+    path('login/', view = LoginAPIView.as_view(),), # this will return token
+    path('user', view =UserAPIView.as_view(),), # will return user data
+    path('refresh', view =RefreshAPIView.as_view(),), # expecting to refresh the token
+    path('logout', view =LogoutAPIView.as_view(),),  #kill the refresh token
+
+
+
+
+
+
+    # path('signUp/', view= signUp, name='signUp'),
+    # path('login/', view= login, name='login'),
+    # path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    # path('graphql/',view = graphql, name = "graphql"),
+    # path('createuserg/',view=signUpGraph, name= "signUpGraph"),
+    # path('usergraph/',view = Usergraphql, name = "Usergraphql"),
 
 
     # Graphql Paths
-    path('graphql/',view = graphql, name = "graphql"),
-    path('createuserg/',view=signUpGraph, name= "signUpGraph"),
-    path('usergraph/',view = Usergraphql, name = "Usergraphql"),
 ]
 
 
