@@ -23,15 +23,19 @@ class Location(models.Model):
     class Meta:
         verbose_name_plural = "Locations"
 
-        
+
+def upload_vendor_images(instance, filename):
+    return 'Vendors/%s/Profile/%s' % (instance.name, filename)
+
+
 class Vendor(models.Model):
     name = models.CharField(max_length=250, blank=True, unique=True,null = True)
     vendor_slug = models.SlugField(unique=True, db_index=True)
     number_of_branches = models.IntegerField(default= 1, blank = True, null = True)
     logo_image = models.ImageField(
-        upload_to="Vendors", blank=True, )
+        upload_to=upload_vendor_images, blank=True, )
     background_image = models.ImageField(
-        upload_to="Vendors", blank=True, )
+        upload_to=upload_vendor_images, blank=True, )
     Longitude = models.FloatField(default=0,null=True, blank= True)
     Latitude = models.FloatField(default=0,null=True, blank= True)
     created = models.DateTimeField(auto_now_add=True)
@@ -74,6 +78,9 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
 
+def get_upload_to(instance, filename):
+    return 'Vendors/%s/%s' %(instance.vendor, filename)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=250, blank=True)
@@ -109,6 +116,20 @@ class Poster(models.Model):
     background_image = models.ImageField(
         upload_to="Mobile_Poster", blank=True,)
     active = models.BooleanField(default=True)
+
+
+class FileUpload(models.Model):
+    name = models.CharField(max_length=250, blank=True, unique=True)
+    vendor = models.ForeignKey(
+        Vendor, on_delete=models.CASCADE, blank=True,null= True)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, blank=True,null= True)
+    solid_File =  models.FileField(upload_to= get_upload_to)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "3dProducts"
+
 
 
 # class PromoCode(models.Model):

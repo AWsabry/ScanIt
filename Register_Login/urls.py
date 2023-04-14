@@ -1,6 +1,6 @@
-from django.urls import path
+from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView
+from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView,ChangePasswordView
 
 
 app_name = 'Register_Login'
@@ -15,8 +15,7 @@ urlpatterns = [
     path('user', view =UserAPIView.as_view(),), # will return user data
     path('refresh', view =RefreshAPIView.as_view(),), # expecting to refresh the token
     path('logout', view =LogoutAPIView.as_view(),),  #kill the refresh token
-
-
+    path('change-password/', ChangePasswordView.as_view(),), #Change Password
 
 
 

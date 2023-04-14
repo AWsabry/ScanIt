@@ -1,31 +1,19 @@
 # Importing Django Libraries required
-from django.shortcuts import redirect, render
-from django.contrib import messages
-from django.contrib.auth import authenticate, login as user_login, logout
+from django.contrib.auth import logout
 
-from django.template.loader import render_to_string
-from django.utils import timezone
-from django.contrib import messages
-from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth import authenticate
 from django.utils.translation import gettext as _
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.mail import EmailMessage
-from django.contrib.auth.models import update_last_login
+from rest_framework.permissions import IsAuthenticated   
 
 
 from Register_Login.authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
 from Register_Login.exception import APIException
 from Register_Login.models import Profile
-from .schema import get_all_users_schema,get_user_by_email_Schema,create_user_schema
 
-# GraphQL Libraries
-from graphene_django.views import GraphQLView
-from django.http import JsonResponse
 
 # Importing the utilts file
-from Register_Login.utils import AccessTokenGenerator
+from rest_framework import generics
 
 
 
@@ -33,7 +21,7 @@ from Register_Login.utils import AccessTokenGenerator
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from Register_Login.serializers import LoginSerializer, UserSerializer
+from Register_Login.serializers import ChangePasswordSerializer, LoginSerializer, UserSerializer
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import APIException, AuthenticationFailed
 from django.utils.decorators import method_decorator
@@ -116,73 +104,43 @@ class LogoutAPIView(APIView):
             'message': 'success'
         }
         return response
+
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """
+    An endpoint for changing password.
+    """
+    serializer_class = ChangePasswordSerializer
+    model = Profile
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password updated successfully',
+                'data': []
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-# Login Users
-# @csrf_exempt 
-# @api_view(['GET','POST','PUT'])
-# def login(request,token):
-#     if request.method == 'GET':
-#         all = Profile.objects.filter(is_active = True)
-#         serializer = LoginSerializer(all,many = True)
-#         return JsonResponse({"Names": serializer.data}, safe=False)
-
-#     if request.method == 'POST':
-#         serializer = LoginSerializer(data= request.data,context={'request': request},)
-#         print(serializer)
-#         if serializer.is_valid(raise_exception=True):
-#             print("Valid")
-#             user = authenticate(request, email=serializer.validated_data['email'],
-#             password=serializer.validated_data['password'],)
-#             if user:
-#                 if user.is_active:
-#                         update_last_login(None, user)
-#                         user_login(request, user)
-#                         print('active')
-#                         print(HttpResponse.status_code)
-#                         return Response("User Logged In Successfully", status = status.HTTP_200_OK)
-
-#                 else:
-#                     print('Not Active')
-#                     return Response("User is Not Active", status = status.HTTP_400_BAD_REQUEST)
-           
-#             else:
-#                 print('Invalid Credentials')
-#                 print(status.HTTP_400_BAD_REQUEST)
-#                 return Response("Invalid Credentials", status = status.HTTP_400_BAD_REQUEST)
-                
-#         else:
-#             print("Not Valid")
-#         return Response(serializer.data, status = status.HTTP_404_NOT_FOUND)
-
-
-# Creating Users
-# @csrf_exempt 
-# @api_view(['GET','POST'])
-# def signUp(request):
-#     if request.method == 'GET':
-#         all = Profile.objects.filter(is_active = True)
-#         serializer = UserSerializer(all,many = True)
-#         return JsonResponse({"Names": serializer.data}, safe=False)
-
-#     if request.method == 'POST':
-        # serializer = UserSerializer(data= request.data)
-        # if serializer.is_valid():
-        #     user = Profile.objects.create_user(
-        #             email=request.data['email'],
-        #             first_name=request.data['first_name'],
-        #             last_name=request.data['last_name'],
-        #             password=request.data['password'],
-        #             city=serializer.validated_data['city'],
-        #             PhoneNumber=request.data['PhoneNumber'],
-        #             is_active = True
-        #         )
-        #     if user:
-        #         return Response("User Created Successfully", status = status.HTTP_200_OK)
-        #     else:
-        #         return Response("Error Creating User", status = status.HTTP_400_BAD_REQUEST)
-        # else:
-        #     return Response("Serializer Not Valid", status = status.HTTP_400_BAD_REQUEST)
     
 
 

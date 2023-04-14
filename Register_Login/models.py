@@ -7,7 +7,9 @@ from django.utils import timezone
 from scanit import settings
 
 from Register_Login.utils import AccessTokenGenerator
-
+from django.urls import reverse
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.core.mail import send_mail  
 
 time_choices = (
     ('11:00 AM','11:00 AM'),
@@ -121,6 +123,3 @@ class Team_Member(models.Model):
         return self.email
     class Meta:
         verbose_name_plural = "Team members"
-
-
-

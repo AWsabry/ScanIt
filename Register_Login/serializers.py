@@ -17,3 +17,13 @@ class LoginSerializer(serializers.Serializer):
         max_length=128,
         write_only=True
     )
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = Profile
+
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
