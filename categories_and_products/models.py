@@ -17,7 +17,7 @@ class Location(models.Model):
 
 
     def __str__(self):
-        return str(self.location)
+        return str(self.city)
 
     
     class Meta:
@@ -25,7 +25,7 @@ class Location(models.Model):
 
 
 def upload_vendor_images(instance, filename):
-    return 'Vendors/%s/Profile/%s' % (instance.name, filename)
+    return 'Vendors/%s/Profile/%s' % (instance.city, filename)
 
 
 class Vendor(models.Model):
@@ -90,6 +90,8 @@ class Product(models.Model):
         Vendor, on_delete=models.CASCADE, blank=True,null= True)
     description = models.TextField(blank=True)
     price = models.FloatField(default=0)
+    image = models.ImageField(
+        upload_to=get_upload_to, blank=True, )
     category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null = True,)
     active = models.BooleanField(default=True)
     Most_Popular = models.BooleanField(default=False)
