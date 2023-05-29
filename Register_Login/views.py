@@ -1,10 +1,10 @@
 # Importing Django Libraries required
 from django.contrib.auth import logout
-
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.utils.translation import gettext as _
 from django.core.mail import EmailMessage
 from rest_framework.permissions import IsAuthenticated   
-
+from graphene_django.views import GraphQLView
 
 from Register_Login.authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
@@ -15,7 +15,7 @@ from Register_Login.models import Profile
 # Importing the utilts file
 from rest_framework import generics
 
-
+from .schema import get_all_users_schema
 
 # Rest Libraries
 from rest_framework.response import Response
@@ -159,3 +159,6 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 
+@csrf_exempt
+def getUsers(request):
+    return csrf_exempt(GraphQLView.as_view(schema=get_all_users_schema, graphiql=True))(request)

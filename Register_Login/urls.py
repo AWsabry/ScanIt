@@ -1,6 +1,6 @@
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView,ChangePasswordView
+from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView,ChangePasswordView, getUsers
 
 
 app_name = 'Register_Login'
@@ -26,7 +26,7 @@ urlpatterns = [
     # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # path('graphql/',view = graphql, name = "graphql"),
     # path('createuserg/',view=signUpGraph, name= "signUpGraph"),
-    # path('usergraph/',view = Usergraphql, name = "Usergraphql"),
+    path('getUsers/',view = getUsers, name = "getUsers"),
 
 
     # Graphql Paths
