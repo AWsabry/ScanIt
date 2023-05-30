@@ -1,38 +1,35 @@
-from django.urls import path,re_path
+from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from Register_Login.views import Register, activate_user, email_activated, logOut, profile, signIn,email_sent,password_reset_emailing, team,index,about_us,graphql,Usergraphql,signUpGraph
+from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView,ChangePasswordView, getUsers
 
 
 app_name = 'Register_Login'
 
 urlpatterns = [
-    path('register', view = Register, name='Register'),
-    path('login', view = signIn, name='login'),
-    path('logOut',view = logOut, name='logOut'),
-    path('email_sent', view = email_sent, name='email_sent'),
-    path(route='activate/<token>', view=activate_user, name='activate'),
-    path('email_activated', view = email_activated, name='email_activated'),
-    path('team', view = team, name='team'),
-    path('',view = index, name = "index"),
-    path('about_us',view = about_us, name = "about_us"),
-    path('profile',view = profile, name = "profile"),
+
+
+
+    path('register/', view =RegisterAPIView.as_view(),),
+
+    path('login/', view = LoginAPIView.as_view(),), # this will return token
+    path('user', view =UserAPIView.as_view(),), # will return user data
+    path('refresh', view =RefreshAPIView.as_view(),), # expecting to refresh the token
+    path('logout', view =LogoutAPIView.as_view(),),  #kill the refresh token
+    path('change-password/', ChangePasswordView.as_view(),), #Change Password
 
 
 
 
-
-    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
-    path('password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
-    path('password_reset/done/', view = password_reset_emailing ,name='password_reset_emailing'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    # path('signUp/', view= signUp, name='signUp'),
+    # path('login/', view= login, name='login'),
+    # path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    # path('graphql/',view = graphql, name = "graphql"),
+    # path('createuserg/',view=signUpGraph, name= "signUpGraph"),
+    path('getUsers/',view = getUsers, name = "getUsers"),
 
 
     # Graphql Paths
-    path('graphql/',view = graphql, name = "graphql"),
-    path('createuserg/',view=signUpGraph, name= "signUpGraph"),
-    path('usergraph/',view = Usergraphql, name = "Usergraphql"),
 ]
 
 
