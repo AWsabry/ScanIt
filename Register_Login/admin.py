@@ -1,6 +1,5 @@
 from Register_Login.models import Profile, Team_Member
 from django.contrib import admin
-from firebase_admin import messaging
 
 # Register your models here.
 

@@ -25,12 +25,13 @@ class Location(models.Model):
 
 
 def upload_vendor_images(instance, filename):
-    return 'Vendors/%s/Profile/%s' % (instance.city, filename)
+    return 'Vendors/%s/Profile/%s' % (instance.name, filename)
 
 
 class Vendor(models.Model):
     name = models.CharField(max_length=250, blank=True, unique=True,null = True)
     vendor_slug = models.SlugField(unique=True, db_index=True)
+    vendor_phoneNumber = models.CharField(max_length=250, blank=True, unique=True,null = True)
     number_of_branches = models.IntegerField(default= 1, blank = True, null = True)
     logo_image = models.ImageField(
         upload_to=upload_vendor_images, blank=True, )
@@ -82,7 +83,6 @@ def get_upload_to(instance, filename):
 
 class Product(models.Model):
     name = models.CharField(max_length=250, blank=True)
-    ArabicName = models.CharField(max_length = 250, blank = True, null= True)
     product_slug = models.SlugField(unique=True, db_index=True,)
     vendor = models.ForeignKey(
         Vendor, on_delete=models.CASCADE, blank=True,null= True)
@@ -90,6 +90,7 @@ class Product(models.Model):
     price = models.FloatField(default=0)
     image = models.ImageField(
         upload_to=get_upload_to, blank=True, )
+    file =  models.FileField(upload_to= get_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null = True,)
     active = models.BooleanField(default=True)
     Most_Popular = models.BooleanField(default=False)
@@ -98,9 +99,7 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        arabic_string = self.ArabicName
-        arabic_string.encode('unicode-escape')
-        return arabic_string
+        return self.name
 
     def get_absolute_url(self):
         return reverse("categories_and_products:product_details", args=[self.vendors.vendors_slug] + [self.product_slug])
@@ -118,17 +117,17 @@ class Poster(models.Model):
     active = models.BooleanField(default=True)
 
 
-class FileUpload(models.Model):
-    name = models.CharField(max_length=250, blank=True, unique=True)
-    vendor = models.ForeignKey(
-        Vendor, on_delete=models.CASCADE, blank=True,null= True)
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, blank=True,null= True)
-    solid_File =  models.FileField(upload_to= get_upload_to)
-    active = models.BooleanField(default=True)
+# class FileUpload(models.Model):
+#     name = models.CharField(max_length=250, blank=True, unique=True)
+#     vendor = models.ForeignKey(
+#         Vendor, on_delete=models.CASCADE, blank=True,null= True)
+#     product = models.ForeignKey(
+#         Product, on_delete=models.CASCADE, blank=True,null= True)
+#     solid_File =  models.FileField(upload_to= get_upload_to)
+#     active = models.BooleanField(default=True)
 
-    class Meta:
-        verbose_name_plural = "3dProducts"
+#     class Meta:
+#         verbose_name_plural = "3dProducts"
 
 
 

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ik06vwc5@ju%niaa8+#5zj01cex32_p(pxcbg@h%tx6--!b1xx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://127.0.0.1','127.0.0.1']
+ALLOWED_HOSTS = ['http://127.0.0.1','127.0.0.1','http://api.3dscanit.org','https://api.3dscanit.org','api.3dscanit.org']
 
 
 # Application definition
@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['http://127.0.0.1','127.0.0.1']
 INSTALLED_APPS = [
     'Register_Login',
     'categories_and_products',
+    'orders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'scanit.urls'
 
@@ -135,12 +135,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Hosting Path : 
+# STATIC_ROOT = '/home/gdscvpwr/api.3dscanit.org/static'
+
+# Local Path : 
 STATICFILES_DIRS = [
     BASE_DIR / "static",]
 
 
-MEDIA_ROOT = BASE_DIR / "uploads"
 MEDIA_URL = "/uploads/"
+
+# Hosting Path : 
+# MEDIA_ROOT = "/home/gdscvpwr/api.3dscanit.org/uploads"
+
+# Local Path :
+MEDIA_ROOT = BASE_DIR / "uploads"
 
 
 AUTH_USER_MODEL = 'Register_Login.Profile'
@@ -157,14 +166,14 @@ AUTH_EMAIL_ACTIVATE_EXPIRE = 31104000 # in seconds
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'mail.x-eats.com' 
-EMAIL_PORT = 26
-EMAIL_USE_TLS = False 
-EMAIL_HOST_USER = 'noreply@x-eats.com'
-EMAIL_HOST_PASSWORD = 'h@l-[c]OFZyD'
+# EMAIL_HOST = 'mail.x-eats.com' 
+# EMAIL_PORT = 26
+# EMAIL_USE_TLS = False 
+# EMAIL_HOST_USER = 'noreply@x-eats.com'
+# EMAIL_HOST_PASSWORD = 'h@l-[c]OFZyD'
 
-MAXIMUM_SIZE_ALLOWED_PHOTO = 1000 * 312 * 8
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# MAXIMUM_SIZE_ALLOWED_PHOTO = 1000 * 312 * 8
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 CORS_ORIGIN_ALLOW_ALL = True
