@@ -8,6 +8,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class updateLimitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['download_limit',]
+
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
     password = serializers.CharField(

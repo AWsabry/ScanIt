@@ -10,6 +10,7 @@ from Register_Login.authentication import create_access_token, create_refresh_to
 
 from Register_Login.exception import APIException
 from Register_Login.models import Profile
+from django.http import JsonResponse
 
 
 # Importing the utilts file
@@ -21,7 +22,7 @@ from .schema import get_all_users_schema
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from Register_Login.serializers import ChangePasswordSerializer, LoginSerializer, UserSerializer
+from Register_Login.serializers import ChangePasswordSerializer, LoginSerializer, UserSerializer, updateLimitSerializer
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import APIException, AuthenticationFailed
 from django.utils.decorators import method_decorator
@@ -143,7 +144,20 @@ class ChangePasswordView(generics.UpdateAPIView):
     
     
 
+class updateLimitAPI(APIView):
+    def put(self, request,email):
+        serializer = updateLimitSerializer(data=request.data)
+        if request.data != None:
+            Profile.objects.filter(email=email).update(download_limit=request.data["download_limit"],)
+            return Response("Updated in the database", status=status.HTTP_200_OK)
+        else:
+            return Response("Data is Not Valid", status=status.HTTP_400_BAD_REQUEST)
 
+
+    def get(self,request,email):
+        all = Profile.objects.filter(email=email)
+        serializer = updateLimitSerializer(all, many=True)
+        return JsonResponse({"Names": serializer.data}, safe=False) 
 
 
 # @csrf_exempt

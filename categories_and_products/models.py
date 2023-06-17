@@ -2,6 +2,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
 from django.db import models
+from django.utils.text import slugify
 
 from scanit import settings
 
@@ -30,7 +31,7 @@ def upload_vendor_images(instance, filename):
 
 class Vendor(models.Model):
     name = models.CharField(max_length=250, blank=True, unique=True,null = True)
-    vendor_slug = models.SlugField(unique=True, db_index=True)
+    vendor_slug = models.SlugField(unique=True, db_index=True,editable=False)
     vendor_phoneNumber = models.CharField(max_length=250, blank=True, unique=True,null = True)
     number_of_branches = models.IntegerField(default= 1, blank = True, null = True)
     logo_image = models.ImageField(
@@ -49,6 +50,10 @@ class Vendor(models.Model):
     def get_absolute_url_restaurant(self):
         return reverse('categories_and_products:menu', args=[self.restaurant_slug])
     
+    def save(self, *args, **kwargs):
+        self.vendor_slug = slugify(self.name)
+        super(Vendor, self).save(*args, **kwargs)
+    
     class Meta:
         verbose_name_plural = "Vendors"
 
@@ -57,7 +62,7 @@ class Vendor(models.Model):
 
 class Category(models.Model):
     Category_name = models.CharField(max_length=250,unique = True,)
-    category_slug = models.SlugField(unique=True, db_index=True,blank=True,null = True)
+    category_slug = models.SlugField(unique=True, db_index=True,blank=True,null = True,editable=False)
     image = models.ImageField(
         upload_to="Categories", blank=True,null = True )
     active = models.BooleanField(default=True)
@@ -69,7 +74,8 @@ class Category(models.Model):
         
         
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+        self.category_slug = slugify(self.Category_name)
+        super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url_category(self):
         return reverse('categories_and_products:category_details', args=[self.Restaurant.restaurant_slug] + [self.categoryslug])
@@ -80,14 +86,36 @@ class Category(models.Model):
 def get_upload_to(instance, filename):
     return 'Vendors/%s/%s' %(instance.vendor, filename)
 
+class SubCategory(models.Model):
+    SubCategory_name = models.CharField(max_length=250,unique = True,)
+    subCategory_slug = models.SlugField(unique=True, db_index=True,blank=True,null = True,editable=False)
+    image = models.ImageField(
+        upload_to="Categories", blank=True,null = True )
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, blank=True,null= True)
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    
+    def __str__(self):
+        return str(self.SubCategory_name)
+    
+    def save(self, *args, **kwargs):
+        self.subCategory_slug = slugify(self.SubCategory_name)
+        super(SubCategory, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Sub-Categories"
+
 
 class Product(models.Model):
     name = models.CharField(max_length=250, blank=True)
-    product_slug = models.SlugField(unique=True, db_index=True,)
+    product_slug = models.SlugField(unique=True, db_index=True,editable=False)
     vendor = models.ForeignKey(
         Vendor, on_delete=models.CASCADE, blank=True,null= True)
     description = models.TextField(blank=True)
-    price = models.FloatField(default=0)
+    start_from = models.FloatField(default=0)
+    reach_to = models.FloatField(default=0)
     image = models.ImageField(
         upload_to=get_upload_to, blank=True, )
     file =  models.FileField(upload_to= get_upload_to)
@@ -107,7 +135,9 @@ class Product(models.Model):
     def get_absolute_searched_url(self):
         return reverse("categories_and_products:searched_Page_Restaurants_Products", args=[self.vendors.vendors_slug])
     
-
+    def save(self, *args, **kwargs):
+        self.product_slug = slugify(self.name)
+        super(Product, self).save(*args, **kwargs)
 
 
 class Poster(models.Model):
@@ -117,36 +147,3 @@ class Poster(models.Model):
     active = models.BooleanField(default=True)
 
 
-# class FileUpload(models.Model):
-#     name = models.CharField(max_length=250, blank=True, unique=True)
-#     vendor = models.ForeignKey(
-#         Vendor, on_delete=models.CASCADE, blank=True,null= True)
-#     product = models.ForeignKey(
-#         Product, on_delete=models.CASCADE, blank=True,null= True)
-#     solid_File =  models.FileField(upload_to= get_upload_to)
-#     active = models.BooleanField(default=True)
-
-#     class Meta:
-#         verbose_name_plural = "3dProducts"
-
-
-
-# class PromoCode(models.Model):
-#     Promocode = models.CharField(
-#         max_length=10, unique=True, blank=True, null=True)
-#     percentage = models.FloatField(default=0.0, validators=[
-#                                    MinValueValidator(0.0), MaxValueValidator(1.0)], blank=True, null=True,)
-#     created = models.DateTimeField(auto_now_add=True)
-#     active = models.BooleanField(default=False)
-#     avaliable_time = models.IntegerField(default= 0, blank = True, null = True)
-
-
-#     def __str__(self):
-#         return self.Promocode
-
-#     def save(self, *args, **kwargs):
-#         self.percentage = round(self.percentage, 2)
-#         super(PromoCode, self).save(*args, **kwargs)
-
-#     class Meta:
-#         verbose_name_plural = "PromoCodes"

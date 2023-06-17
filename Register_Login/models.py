@@ -68,7 +68,10 @@ class Profile(AbstractBaseUser,PermissionsMixin):
     PhoneNumber =  models.CharField(max_length=20, null=True)
     last_modified = models.DateTimeField(auto_now=True)
     is_vendor = models.BooleanField(default=False)
+    download_limit = models.PositiveIntegerField(default=5, blank= True, null= True)
+    allow_download = models.BooleanField(default=True)
 
+    
     USERNAME_FIELD = 'email'
     objects = UserManager()
 
