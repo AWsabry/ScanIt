@@ -31,7 +31,7 @@ from django.utils.decorators import method_decorator
 # @method_decorator(csrf_exempt, name='dispatch')
 class RegisterAPIView(APIView):
     def post(self,request):
-        serializer = UserSerializer(data= request.data)
+        serializer = UserSerializer(data= request.data,partial=True)
         if serializer.is_valid():
             user = Profile.objects.create_user(
                     email=request.data['email'],

@@ -15,6 +15,7 @@ urlpatterns = [
     path('user', view =UserAPIView.as_view(),), # will return user data
     path('refresh', view =RefreshAPIView.as_view(),), # expecting to refresh the token
     path('logout', view =LogoutAPIView.as_view(),),  # kill the refresh token
+    path('ChangePasswordView', view =ChangePasswordView.as_view(),),  # kill the refresh token
     path('update_limit/<str:email>', updateLimitAPI.as_view(),), # Update Download Limit
 
 
