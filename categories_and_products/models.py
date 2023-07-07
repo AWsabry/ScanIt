@@ -120,7 +120,6 @@ class Product(models.Model):
     image = models.ImageField(
         upload_to=get_upload_to, blank=True, )
     file =  models.FileField(upload_to= get_upload_to)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null = True,)
     active = models.BooleanField(default=True)
     SubCategory = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null= True)
     Most_Popular = models.BooleanField(default=False)

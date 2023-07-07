@@ -38,13 +38,13 @@ class Vendor_Admin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     # prepopulated_fields = {'product_slug': ('name','vendor',), }
-    list_filter = ("name", "category", "vendor", "created")
-    list_display = ('name', "start_from","reach_to", 'vendor', "category",
+    list_filter = ("name", "vendor", "created","SubCategory")
+    list_display = ('name', "start_from","reach_to", 'vendor', "SubCategory",
                      "id", "created","Best_Offer", "Most_Popular","New_Products","active",)
     # inlines = [ProductsFile,]
     list_display_links = [
         'name',
-        'category',
+        'SubCategory',
     ]
     search_fields = ['name']
     list_editable=['active']

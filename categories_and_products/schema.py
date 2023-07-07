@@ -76,11 +76,11 @@ class subcategories_by_category_slug_Query(graphene.ObjectType):
 
 # Getting all categories
 class products_by_category_slug_Query(graphene.ObjectType):
-    get_products_by_category = graphene.List(ProductType, category_slug = graphene.String(required=True))
+    get_products_by_category = graphene.List(ProductType, subCategory_slug = graphene.String(required=True))
 
-    def resolve_get_products_by_category(self, info,category_slug):
-        print(Product.objects.filter(category__category_slug = category_slug))
-        return Product.objects.filter(category__category_slug = category_slug)
+    def resolve_get_products_by_category(self, info,subCategory_slug):
+        print(Product.objects.filter(SubCategory__subCategory_slug = subCategory_slug))
+        return Product.objects.filter(SubCategory__subCategory_slug = subCategory_slug)
 # End Getting Categories
 
 
