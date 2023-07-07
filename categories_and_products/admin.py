@@ -6,7 +6,7 @@ from categories_and_products.models import Location, Poster,Category, Product, V
 class Categories_Admin(admin.ModelAdmin):
     # prepopulated_fields = {'category_slug': ('Category_name',), }
     list_filter = ("Category_name", "created",)
-    list_display = ('Category_name', "created","active","id",)
+    list_display = ('Category_name', "created","active","id","category_slug")
     search_fields = ['Category_name']
     list_editable=['active']
 

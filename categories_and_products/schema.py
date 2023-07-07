@@ -26,18 +26,11 @@ class SubCategoryType(DjangoObjectType):
 
 # Products
 class ProductType(DjangoObjectType):
-
     class Meta:
         model = Product
         fields = "__all__"
 
-# Files
-# class FileDownloadType(DjangoObjectType):
-#     class Meta:
-#         model = FileUpload
-#         fields = "__all__"
 
-# Getting Vendors
 
 # Getting all vendors
 class all_Vendors_Query(graphene.ObjectType):
@@ -70,6 +63,16 @@ class all_SubCategories_Query(graphene.ObjectType):
 
     def resolve_all_subcategories(self, info):
         return SubCategory.objects.all()
+    
+# Getting SubCat by Cat Id
+
+class subcategories_by_category_slug_Query(graphene.ObjectType):
+    get_subcategories_by_category = graphene.List(SubCategoryType, category_slug = graphene.String(required=True))
+
+    def resolve_get_subcategories_by_category(self, info,category_slug):
+        print(SubCategory.objects.filter(category__category_slug = category_slug))
+        return SubCategory.objects.filter(category__category_slug = category_slug)
+    
 
 # Getting all categories
 class products_by_category_slug_Query(graphene.ObjectType):
@@ -109,9 +112,12 @@ get_all_vendors_schema = graphene.Schema(query=all_Vendors_Query,)
 get_vendor_by_id_schema = graphene.Schema(query=Vendor_by_id_Query,)
 
 get_all_categories_schema = graphene.Schema(query=all_Categories_Query)
-get_all_subCategories_schema = graphene.Schema(query=all_SubCategories_Query)
-
 get_products_by_category_slug_schema = graphene.Schema(query=products_by_category_slug_Query)
+
+get_all_subCategories_schema = graphene.Schema(query=all_SubCategories_Query)
+get_subcategories_by_category_slug_schema = graphene.Schema(query=subcategories_by_category_slug_Query)
+
+
 
 
 get_all_products_schema = graphene.Schema(query=all_Products_Query,)
