@@ -2,7 +2,7 @@ import graphene
 from graphene import InputObjectType, Mutation, String
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
-from .models import Vendor,Category,Product,SubCategory
+from .models import Vendor,Category,Product,SubCategory,Gallery
 
 # Defining Models
 
@@ -63,7 +63,11 @@ class all_SubCategories_Query(graphene.ObjectType):
 
     def resolve_all_subcategories(self, info):
         return SubCategory.objects.all()
-    
+
+
+class ImageType(DjangoObjectType):
+    class Meta:
+        model = Gallery
 # Getting SubCat by Cat Id
 
 class subcategories_by_category_slug_Query(graphene.ObjectType):
@@ -99,6 +103,7 @@ class all_Products_Query(graphene.ObjectType):
 # Getting Product By id
 class Product_by_id_Query(graphene.ObjectType):
     get_product = graphene.Field(ProductType, id = graphene.String(required=True))
+    
     
     def resolve_get_product(root, info, id):
         return Product.objects.get(id=id)

@@ -9,7 +9,7 @@ from categories_and_products.models import (
     Product,
     SubCategory,
     Vendor,
-    Poster
+    Gallery
 )
 
 

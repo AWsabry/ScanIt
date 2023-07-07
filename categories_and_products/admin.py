@@ -1,5 +1,5 @@
 from django.contrib import admin
-from categories_and_products.models import Location, Poster,Category, Product, Vendor, SubCategory
+from categories_and_products.models import Location, Gallery,Category, Product, Vendor, SubCategory
 
 # Register your models here.
 
@@ -52,14 +52,14 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class Poster_Admin(admin.ModelAdmin):
-    list_display = ("name","active")
+    list_display = ("id","active")
 
 
 
 admin.site.register(Category, Categories_Admin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Vendor,Vendor_Admin)
-admin.site.register(Poster,Poster_Admin)
+admin.site.register(Gallery,Poster_Admin)
 admin.site.register(Location)
 admin.site.register(SubCategory, SubCategoryAdmin)
 

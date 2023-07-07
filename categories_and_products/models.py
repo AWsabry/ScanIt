@@ -141,10 +141,10 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
 
-class Poster(models.Model):
-    name = models.CharField(max_length=250, blank=True, unique=True)
-    background_image = models.ImageField(
-        upload_to="Mobile_Poster", blank=True,)
+class Gallery(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE, blank=True,null= True)
+    images = models.ImageField(
+        upload_to="Gallery", blank=True,)
     active = models.BooleanField(default=True)
 
 
