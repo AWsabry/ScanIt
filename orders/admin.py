@@ -7,7 +7,7 @@ from .models import Order, PromoCode
 
 class order_admin(admin.ModelAdmin):
     list_filter = ("email", "product","vendor","category")
-    list_display = ("full_name",'PhoneNumber','vendor_name','vendor_Phone','productName','categoryName','id','created'
+    list_display = ("full_name",'PhoneNumber','vendor_name','vendor_Phone','productName','categoryName','id','created','code'
                   )
     search_fields = ['email']
 
@@ -35,20 +35,30 @@ class PromoCodeAdmin(admin.ModelAdmin):
     search_fields = ['user__email','user__PhoneNumber','vendor__name']
 
     def vendor_name(self, obj):
+        if not obj.vendor:
+            return "Empty"
         return obj.vendor.name
     
     def user_phone(self, obj):
+        if not obj.user:
+            return "Empty"
         return obj.user.PhoneNumber
 
     def full_name(self, obj):
         fullName = obj.user.first_name + " " + obj.user.last_name
+        if not fullName:
+            return "Empty"
         return fullName
     
 
     def username(self, obj):
+        if not obj.user:
+            return "Empty"
         return obj.user.email
     
     def vendor_Phone(self, obj):
+        if not obj.vendor:
+            return "Empty"
         return obj.vendor.vendor_phoneNumber
 
 

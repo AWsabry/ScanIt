@@ -1,6 +1,6 @@
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView,ChangePasswordView,updateLimitAPI, getUsers
+from .views import RegisterAPIView, LoginAPIView, UserAPIView, RefreshAPIView, LogoutAPIView,ChangePasswordView,updateLimitAPI, getUsers,GetUserByeEmail
 
 
 app_name = 'Register_Login'
@@ -27,7 +27,9 @@ urlpatterns = [
     # path('graphql/',view = graphql, name = "graphql"),
     # path('createuserg/',view=signUpGraph, name= "signUpGraph"),
     path('getUsers/',view = getUsers, name = "getUsers"),
+    path('get_user_by_email/<str:email>',view = GetUserByeEmail.as_view(), name = "get_user_by_email"),
 
+    
 
     # Graphql Paths
 ]

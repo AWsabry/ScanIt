@@ -176,3 +176,14 @@ class updateLimitAPI(APIView):
 @csrf_exempt
 def getUsers(request):
     return csrf_exempt(GraphQLView.as_view(schema=get_all_users_schema, graphiql=True))(request)
+
+
+class GetUserByeEmail(APIView):
+    def post(self,request):
+        serializer = UserSerializer(data= request.data)
+        pass
+        
+    def get(self, request,email):
+        all = Profile.objects.filter(email=email)
+        serializer = UserSerializer(all, many = True)
+        return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK)

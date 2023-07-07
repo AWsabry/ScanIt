@@ -34,6 +34,7 @@ class Vendor(models.Model):
     vendor_slug = models.SlugField(unique=True, db_index=True,editable=False)
     vendor_phoneNumber = models.CharField(max_length=250, blank=True, unique=True,null = True)
     number_of_branches = models.IntegerField(default= 1, blank = True, null = True)
+    vendor_type = models.CharField(max_length=250, blank=True,null = True)
     logo_image = models.ImageField(
         upload_to=upload_vendor_images, blank=True, )
     background_image = models.ImageField(
@@ -121,6 +122,7 @@ class Product(models.Model):
     file =  models.FileField(upload_to= get_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,blank=True,null = True,)
     active = models.BooleanField(default=True)
+    SubCategory = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null= True)
     Most_Popular = models.BooleanField(default=False)
     New_Products = models.BooleanField(default=False)
     Best_Offer = models.BooleanField(default=False)

@@ -2,7 +2,7 @@ import graphene
 from graphene import InputObjectType, Mutation, String
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
-from .models import Vendor,Category,Product
+from .models import Vendor,Category,Product,SubCategory
 
 # Defining Models
 
@@ -16,6 +16,12 @@ class VendorType(DjangoObjectType):
 class CategoryType(DjangoObjectType):
     class Meta:
         model = Category
+        fields = "__all__"
+
+# SUBCategories
+class SubCategoryType(DjangoObjectType):
+    class Meta:
+        model = SubCategory
         fields = "__all__"
 
 # Products
@@ -57,7 +63,13 @@ class all_Categories_Query(graphene.ObjectType):
 
     def resolve_all_categories(self, info):
         return Category.objects.all()
-    
+
+# Getting all categories
+class all_SubCategories_Query(graphene.ObjectType):
+    all_subcategories = graphene.List(SubCategoryType)
+
+    def resolve_all_subcategories(self, info):
+        return SubCategory.objects.all()
 
 # Getting all categories
 class products_by_category_slug_Query(graphene.ObjectType):
@@ -97,6 +109,8 @@ get_all_vendors_schema = graphene.Schema(query=all_Vendors_Query,)
 get_vendor_by_id_schema = graphene.Schema(query=Vendor_by_id_Query,)
 
 get_all_categories_schema = graphene.Schema(query=all_Categories_Query)
+get_all_subCategories_schema = graphene.Schema(query=all_SubCategories_Query)
+
 get_products_by_category_slug_schema = graphene.Schema(query=products_by_category_slug_Query)
 
 
