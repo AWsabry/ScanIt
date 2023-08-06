@@ -32,7 +32,7 @@ from twilio.rest import Client
 def SendSms(request,user):
         print(user.PhoneNumber)    
         account_sid = 'AC7cf95e0405320e10ea82909a44799314'
-        auth_token = '9aa8515feaa56bd3abd41b9369f06d93'
+        auth_token = '8e37eece365e2baf9803659c35d314a0'
         client = Client(account_sid, auth_token)
         message = client.messages.create(
             from_='+13184077006',
@@ -51,23 +51,21 @@ class RegisterAPIView(APIView):
         if Profile.objects.filter(PhoneNumber=request.data['PhoneNumber']).exists():
             return Response("PhoneNumber Exist, Please Login", status = status.HTTP_400_BAD_REQUEST)
         else:
-            if serializer.is_valid():
-                user = Profile.objects.create_user(
+            user = Profile.objects.create_user(
                         email=request.data['email'],
                         first_name=request.data['first_name'],
                         last_name=request.data['last_name'],
                         password=request.data['password'],
-                        city=serializer.validated_data['city'],
+                        city=request.data['city'],
                         PhoneNumber=request.data['PhoneNumber'],
                         is_active = False
                     )
-                if user:
-                    SendSms(request,user)
-                    return Response("User Created Successfully, Sms has been sent", status = status.HTTP_200_OK)
-                else:
-                    return Response("Error Creating User", status = status.HTTP_400_BAD_REQUEST)
+            if user:
+                SendSms(request,user)
+                return Response("User Created Successfully, Sms has been sent", status = status.HTTP_200_OK)
             else:
-                return Response("Serializer Not Valid, Check Your Data Inputs", status = status.HTTP_400_BAD_REQUEST)
+                return Response("Error Creating User", status = status.HTTP_400_BAD_REQUEST)
+
 
 
 # @method_decorator(csrf_exempt, name='dispatch')
@@ -165,7 +163,7 @@ class ChangePasswordView(generics.UpdateAPIView):
     
 
 class updateLimitAPI(APIView):
-    def put(self, request,email):
+    def post(self, request,email):
         serializer = updateLimitSerializer(data=request.data)
         if request.data != None:
             user = Profile.objects.get(email=email)
@@ -176,7 +174,7 @@ class updateLimitAPI(APIView):
                     limit = user.download_limit - 1
                     Profile.objects.filter(email=email).update(download_limit=limit)
                     print(user.download_limit)
-                    return Response("Updated in the database", status=status.HTTP_200_OK)
+                    return Response(limit, status=status.HTTP_200_OK)
             else:
                 return Response("User Allow Download field in Database is False", status=status.HTTP_400_BAD_REQUEST)
         else:
