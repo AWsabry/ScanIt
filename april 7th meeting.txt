@@ -1,0 +1,8 @@
+- SubCat instead of category in product
+- Adding the vendor type collection and link it with the vendor when added
+- verfing by phone number sms
+- auto-Generated Promo Code
+- remove the promocode colletion
+- order {
+name, email, product data, vendor, phone number
+}
