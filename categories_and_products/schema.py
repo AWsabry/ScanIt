@@ -103,8 +103,6 @@ class all_Products_Query(graphene.ObjectType):
 # Getting Product By id
 class Product_by_id_Query(graphene.ObjectType):
     get_product = graphene.Field(ProductType, id = graphene.String(required=True))
-    
-    
     def resolve_get_product(root, info, id):
         return Product.objects.get(id=id)
     

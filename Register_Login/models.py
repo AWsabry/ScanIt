@@ -69,6 +69,7 @@ class Profile(AbstractBaseUser,PermissionsMixin):
     last_modified = models.DateTimeField(auto_now=True)
     is_vendor = models.BooleanField(default=False)
     download_limit = models.PositiveIntegerField(default=5, blank= True, null= True)
+    download_limit_update_date = models.DateTimeField(auto_now=True)
     allow_download = models.BooleanField(default=True)
 
     
@@ -86,12 +87,17 @@ class Profile(AbstractBaseUser,PermissionsMixin):
         super(Profile, self).save(*args, **kwargs)
 
 
-class Newsletter(models.Model):
+class ContactUs(models.Model):
     email = models.EmailField(max_length=500, blank=True)
+    message = models.TextField(max_length= 500,blank=True,null=True)
+    subject = models.TextField(max_length= 200,blank=True,null=True)
+    created = models.DateTimeField(auto_now=True, editable=False)
+
     def __str__(self):
         return self.email
 
-
+    class Meta:
+        verbose_name_plural = "Contact Us"
 
 
 

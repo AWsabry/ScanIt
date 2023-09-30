@@ -1,4 +1,4 @@
-from Register_Login.models import Profile, Team_Member
+from Register_Login.models import Profile, Team_Member,ContactUs
 from django.contrib import admin
 
 # Register your models here.
@@ -35,6 +35,8 @@ class AccessTokenAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Profile, Register)
+admin.site.register(ContactUs,)
+
 admin.site.register(Team_Member, Team_Admin)
 
 

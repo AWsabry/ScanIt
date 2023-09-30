@@ -8,7 +8,7 @@ from rest_framework import status
 from categories_and_products.models import Product
 from orders.models import Order
 from django.http import JsonResponse
-from categories_and_products.serializers import ProductsSerializer,VideoSerializer,GallerySerializer
+from categories_and_products.serializers import ProductsSerializer,VideoSerializer,GallerySerializer,NewProductsSerializer,MostSoldProductsSerializer,BestOfferProductsSerializer
 from categories_and_products.models import (
     Category,
     Product,
@@ -87,7 +87,30 @@ class get_gallery(APIView):
         all = Gallery.objects.filter(product__id=id)
         serializer = GallerySerializer(all, many = True)
         return JsonResponse({"Images": serializer.data}, safe=False)
+
+
+# NewProducts
+class get_New_Products(APIView):
+    def get(self, request):
+        all = Product.objects.filter(New_Products=True)
+        serializer = NewProductsSerializer(all, many = True)
+        return JsonResponse({"Products": serializer.data}, safe=False)
     
+
+# MostSold
+class get_mostSold_products(APIView):
+    def get(self, request):
+        all = Product.objects.filter(Most_Popular=True)
+        serializer = MostSoldProductsSerializer(all, many = True)
+        return JsonResponse({"Products": serializer.data}, safe=False)
+    
+
+# BestOffer
+class get_bestOffer_products(APIView):
+    def get(self, request):
+        all = Product.objects.filter(Best_Offer=True)
+        serializer = BestOfferProductsSerializer(all, many = True)
+        return JsonResponse({"Products": serializer.data}, safe=False)
     
       
 def index(request):

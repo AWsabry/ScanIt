@@ -5,11 +5,12 @@ from django.utils.translation import gettext as _
 from django.core.mail import EmailMessage
 from rest_framework.permissions import IsAuthenticated   
 from graphene_django.views import GraphQLView
+from django.utils import timezone
 
 from Register_Login.authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
 from Register_Login.exception import APIException
-from Register_Login.models import Profile
+from Register_Login.models import Profile,ContactUs
 from django.http import JsonResponse
 
 
@@ -22,7 +23,7 @@ from .schema import get_all_users_schema
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from Register_Login.serializers import ChangePasswordSerializer, LoginSerializer, UserSerializer, updateLimitSerializer
+from Register_Login.serializers import ChangePasswordSerializer, ContactUsSerializer, UserSerializer, updateLimitSerializer
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import APIException, AuthenticationFailed
 from django.utils.decorators import method_decorator
@@ -201,7 +202,42 @@ class GetUserByeEmail(APIView):
         all = Profile.objects.filter(email=email)
         serializer = UserSerializer(all, many = True)
         return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK)
-    
+
+
+class update_daily_limit(APIView):
+    def post(self,request,email):
+        user = Profile.objects.get(email=email)
+        all = Profile.objects.filter(email=email)
+        serializer = UserSerializer(all, many = True)
+        current_date = timezone.now()
+        one_day_later = current_date + timezone.timedelta(days=1)
+        model_date = user.download_limit_update_date
+
+        if current_date > model_date:
+           Profile.objects.filter(email=email).update(download_limit= 5,download_limit_update_date=one_day_later)
+           return JsonResponse({"Names": serializer.data, "Message": "Updated"}, safe=False,status = status.HTTP_200_OK)
+        else:
+            return JsonResponse({"Names": serializer.data, "Message": "1 day has not been passed yet"}, safe=False,status = status.HTTP_200_OK)
+        
+    def get(self, request,email):
+        all = Profile.objects.filter(email=email)
+        serializer = UserSerializer(all, many = True)
+        return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK)
+
+class ContactUsView(APIView):
+    def post(self,request):
+        serializer = ContactUsSerializer(data= request.data)
+        ContactUs.objects.create(
+            email=request.data['email'],
+            message=request.data['message'],
+            subject=request.data['subject'],
+        )
+        return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK)
+        
+    def get(self, request,email):
+        all = ContactUs.objects.all()
+        serializer = ContactUsSerializer(all, many = True)
+        return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK) 
 
 
 class ResendCode(APIView):
