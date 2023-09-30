@@ -226,15 +226,16 @@ class update_daily_limit(APIView):
 
 class ContactUsView(APIView):
     def post(self,request):
-        serializer = ContactUsSerializer(data= request.data)
+        all =  ContactUs.objects.all()
+        serializer = ContactUsSerializer(all, many = True)
         ContactUs.objects.create(
             email=request.data['email'],
             message=request.data['message'],
             subject=request.data['subject'],
         )
-        return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK)
+        return JsonResponse({"Names": serializer.data,"Message": "Added"}, safe=False,status = status.HTTP_200_OK)
         
-    def get(self, request,email):
+    def get(self, request,):
         all = ContactUs.objects.all()
         serializer = ContactUsSerializer(all, many = True)
         return JsonResponse({"Names": serializer.data}, safe=False,status = status.HTTP_200_OK) 
