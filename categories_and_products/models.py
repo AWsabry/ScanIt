@@ -35,10 +35,8 @@ class Vendor(models.Model):
     vendor_phoneNumber = models.CharField(max_length=250, blank=True, unique=True,null = True)
     number_of_branches = models.IntegerField(default= 1, blank = True, null = True)
     vendor_type = models.CharField(max_length=250, blank=True,null = True)
-    logo_image = models.ImageField(
-        upload_to=upload_vendor_images, blank=True, )
-    background_image = models.ImageField(
-        upload_to=upload_vendor_images, blank=True, )
+    logo_image = models.CharField(max_length=250, blank=True,help_text="Insert Image From Firebase Storage")
+    background_image = models.CharField(max_length=250, blank=True,help_text="Insert Image From Firebase Storage")
     Longitude = models.FloatField(default=0,null=True, blank= True)
     Latitude = models.FloatField(default=0,null=True, blank= True)
     created = models.DateTimeField(auto_now_add=True)
@@ -64,8 +62,7 @@ class Vendor(models.Model):
 class Category(models.Model):
     Category_name = models.CharField(max_length=250,unique = True,)
     category_slug = models.SlugField(unique=True, db_index=True,blank=True,null = True,editable=False)
-    image = models.ImageField(
-        upload_to="Categories", blank=True,null = True )
+    image = models.CharField(max_length=250, blank=True,help_text="Insert Image From Firebase Storage")
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -90,8 +87,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     SubCategory_name = models.CharField(max_length=250,unique = True,)
     subCategory_slug = models.SlugField(unique=True, db_index=True,blank=True,null = True,editable=False)
-    image = models.ImageField(
-        upload_to="Categories", blank=True,null = True )
+    image = models.CharField(max_length=250, blank=True,help_text="Insert Image From Firebase Storage")
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, blank=True,null= True)
     active = models.BooleanField(default=True)
@@ -117,8 +113,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     start_from = models.FloatField(default=0)
     reach_to = models.FloatField(default=0)
-    image = models.ImageField(
-        upload_to=upload_vendor_images, blank=True, )
+    image = models.CharField(max_length=250, blank=True,help_text="Insert Image From Firebase Storage")
     file =  models.CharField(max_length=250, blank=True,help_text="Insert Link From Firebase Storage")
     active = models.BooleanField(default=True)
     SubCategory = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null= True)
@@ -143,8 +138,7 @@ class Product(models.Model):
 
 class Gallery(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE, blank=True,null= True)
-    images = models.ImageField(
-        upload_to="Gallery", blank=True,)
+    images = models.CharField(max_length=250, blank=True,help_text="Insert Image From Firebase Storage")
     active = models.BooleanField(default=True)
     
     class Meta:
